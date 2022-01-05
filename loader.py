@@ -1,4 +1,4 @@
-import requests, json, urllib
+import requests, json, urllib, time
 import pandas as pd
 from countryinfo import CountryInfo
 from Countrydetails import country as country_details_country
@@ -6,7 +6,7 @@ import logging
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 #Logging file
-logging.basicConfig(filename='Location_Sizes.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='Location_Sizes.log', level=logging.DEBUG)
 
 #MongoDB Database Credentials
 m_usr = "experiencia_app"
@@ -74,6 +74,7 @@ def factor_location_sizes():
         if(len(covid_collection[covid_collection["Country_Region"] == country]) != 1):
             distance = searchGoogleForArea(combined_key)
         else:
+            time.sleep(5)
             logging_extra = "Individual Country"
             try:
                 country_obj = CountryInfo(country)
