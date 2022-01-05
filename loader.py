@@ -15,9 +15,13 @@ m_pwd = "G6+-@{R6H?Nn<P<Bx`z?Hpe4IJ`f_VsTF7NGH6JdA+UzU82G%,!^_{=&~-@;Ed3H|RF[&ff
 #client = pymongo.MongoClient("mongodb+srv://"+m_usr+":"+urllib.parse.quote(m_pwd)+"@cluster0.z9ajl.mongodb.net/Cluster0?retryWrites=true&w=majority")
 #covid_db = client.COVID_LOCATIONS
 
+def prepare_raw_covid_data(df):
+    df = df[df['Long_'].notna()]
+    df = df[df['Lat'].notna()]
+    return df
 
-def checkConnToMongoDB():
-    print(covid_db.COVID_DATA.find_one())
+covid_collection = pd.read_csv("raw_covid_data.csv")
+covid_collection = prepare_raw_covid_data(covid_collection)
 
 def searchGoogleForArea(name,skipGet = False):
     try:
@@ -65,8 +69,6 @@ def loadDb():
 
 location_size_column = []
 def factor_location_sizes():
-    covid_collection = pd.read_csv("raw_covid_data.csv")
-    covid_collection = prepare_raw_covid_data(covid_collection)
     for row in covid_collection.iterrows():
         row = row[1].to_frame().to_dict()
         key = [* row][0]
@@ -91,10 +93,7 @@ def factor_location_sizes():
     new_df = covid_collection.assign(location_size = location_size_column)
     new_df.to_csv("advanced_covid_data.csv",index = False)
 
-def prepare_raw_covid_data(df):
-    df = df[df['Long_'].notna()]
-    df = df[df['Lat'].notna()]
-    return df
+
 
 def convert_to_sq_miles(sq_km):
     try:
