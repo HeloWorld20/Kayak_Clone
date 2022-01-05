@@ -20,25 +20,28 @@ def checkConnToMongoDB():
     print(covid_db.COVID_DATA.find_one())
 
 def searchGoogleForArea(name,skipGet = False):
-    if(not skipGet):
-        query = "http://google.com/search?q="+name.replace(" ","%20").replace(",","%2c")+"%20area"
-        req = Request(query, headers={"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"})
-        webpage = urlopen(req).read()
-        f = open("temp.html","w+")
-        f.write(webpage.decode('utf-8'))
-        f.close()
-    f = open("temp.html","r")
-    html_doc = f.read()
-    soup = BeautifulSoup(html_doc, 'html.parser')
-    all_info_boxes = soup.find_all("div",class_="rVusze")
-    for info_box in all_info_boxes:
-        info_box_bs4 = BeautifulSoup(str(info_box), 'html.parser')
-        fl = info_box_bs4.find("a",class_="fl")
-        if("Area" == fl.text):
-            area_span = info_box_bs4.find("span","z8gr9e").text
-            area_span = area_span.split("\xa0")[0]
-            area_span = area_span.replace(",","")
-            return area_span
+    try:
+        if(not skipGet):
+            query = "http://google.com/search?q="+name.replace(" ","%20").replace(",","%2c")+"%20area"
+            req = Request(query, headers={"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"})
+            webpage = urlopen(req).read()
+            f = open("temp.html","w+")
+            f.write(webpage.decode('utf-8'))
+            f.close()
+        f = open("temp.html","r")
+        html_doc = f.read()
+        soup = BeautifulSoup(html_doc, 'html.parser')
+        all_info_boxes = soup.find_all("div",class_="rVusze")
+        for info_box in all_info_boxes:
+            info_box_bs4 = BeautifulSoup(str(info_box), 'html.parser')
+            fl = info_box_bs4.find("a",class_="fl")
+            if("Area" == fl.text):
+                area_span = info_box_bs4.find("span","z8gr9e").text
+                area_span = area_span.split("\xa0")[0]
+                area_span = area_span.replace(",","")
+                return area_span
+    except:
+        return 69696969
     return 0
     
 def loadDb():
@@ -60,9 +63,9 @@ def loadDb():
     f = open("covid_collection.json","w+")
     f.write(json.dumps(new_data))
 
+location_size_column = []
 def factor_location_sizes():
     covid_collection = pd.read_csv("raw_covid_data.csv")
-    location_size_column = []
     covid_collection = prepare_raw_covid_data(covid_collection)
     for row in covid_collection.iterrows():
         row = row[1].to_frame().to_dict()
@@ -102,4 +105,8 @@ def convert_to_sq_miles(sq_km):
 
 if __name__ == "__main__":
     #print(searchGoogleForArea("Northern Territory, Australia",True))
-    factor_location_sizes()
+    try:
+        factor_location_sizes()
+    except:
+        new_df = covid_collection.assign(location_size = location_size_column)
+        new_df.to_csv("advanced_covid_data.csv",index = False)
