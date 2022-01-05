@@ -77,9 +77,10 @@ def factor_location_sizes():
             logging_extra = "Individual Country"
             try:
                 country_obj = CountryInfo(country)
+                print(country_obj)
                 distance = convert_to_sq_miles(country_obj.area())# CountryInfo returns area in km
             except:
-                country_obj = country_details_country.country_details('India')
+                country_obj = country_details_country.country_details(country)
                 distance = convert_to_sq_miles(country_obj.area())# CountryInfo returns area in km
         logging.info(combined_key+" | "+logging_extra+" | "+str(distance))
         location_size_column.append(distance)
@@ -94,7 +95,7 @@ def prepare_raw_covid_data(df):
 
 def convert_to_sq_miles(sq_km):
     conv_fac = 0.386102
-    return sq_km * conv_fac 
+    return float(sq_km) * conv_fac 
 
 if __name__ == "__main__":
     #print(searchGoogleForArea("Northern Territory, Australia",True))
