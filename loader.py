@@ -1,21 +1,19 @@
-import requests, json, pymongo, urllib
+import requests, json
 import pandas as pd
 from countryinfo import CountryInfo
 from Countrydetails import country as country_details_country
 import logging
-from geopy.geocoders import Nominatim
-from bbox import BBox2D
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 #Logging file
-logging.basicConfig(filename='Location_Sizes.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='Location_Sizes.log', level=logging.DEBUG)
 
 #MongoDB Database Credentials
-m_usr = "experiencia_app"
-m_pwd = "G6+-@{R6H?Nn<P<Bx`z?Hpe4IJ`f_VsTF7NGH6JdA+UzU82G%,!^_{=&~-@;Ed3H|RF[&ffJ\P}v]hr_e|^%SD?j:F-Cx:Jt)~qs&x"
+#m_usr = "experiencia_app"
+#m_pwd = "G6+-@{R6H?Nn<P<Bx`z?Hpe4IJ`f_VsTF7NGH6JdA+UzU82G%,!^_{=&~-@;Ed3H|RF[&ffJ\P}v]hr_e|^%SD?j:F-Cx:Jt)~qs&x"
 
-client = pymongo.MongoClient("mongodb+srv://"+m_usr+":"+urllib.parse.quote(m_pwd)+"@cluster0.z9ajl.mongodb.net/Cluster0?retryWrites=true&w=majority")
-covid_db = client.COVID_LOCATIONS
+#client = pymongo.MongoClient("mongodb+srv://"+m_usr+":"+urllib.parse.quote(m_pwd)+"@cluster0.z9ajl.mongodb.net/Cluster0?retryWrites=true&w=majority")
+#covid_db = client.COVID_LOCATIONS
 
 
 def checkConnToMongoDB():
