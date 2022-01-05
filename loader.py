@@ -72,9 +72,9 @@ def factor_location_sizes():
         country = row["Country_Region"]
         logging_extra = ""
         if(len(covid_collection[covid_collection["Country_Region"] == country]) != 1):
+            time.sleep(8)
             distance = searchGoogleForArea(combined_key)
         else:
-            time.sleep(5)
             logging_extra = "Individual Country"
             try:
                 country_obj = CountryInfo(country)
