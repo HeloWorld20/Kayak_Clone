@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, urllib
 import pandas as pd
 from countryinfo import CountryInfo
 from Countrydetails import country as country_details_country
@@ -6,11 +6,11 @@ import logging
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 #Logging file
-logging.basicConfig(filename='Location_Sizes.log', level=logging.DEBUG)
+logging.basicConfig(filename='Location_Sizes.log', encoding='utf-8', level=logging.DEBUG)
 
 #MongoDB Database Credentials
-#m_usr = "experiencia_app"
-#m_pwd = "G6+-@{R6H?Nn<P<Bx`z?Hpe4IJ`f_VsTF7NGH6JdA+UzU82G%,!^_{=&~-@;Ed3H|RF[&ffJ\P}v]hr_e|^%SD?j:F-Cx:Jt)~qs&x"
+m_usr = "experiencia_app"
+m_pwd = "G6+-@{R6H?Nn<P<Bx`z?Hpe4IJ`f_VsTF7NGH6JdA+UzU82G%,!^_{=&~-@;Ed3H|RF[&ffJ\P}v]hr_e|^%SD?j:F-Cx:Jt)~qs&x"
 
 #client = pymongo.MongoClient("mongodb+srv://"+m_usr+":"+urllib.parse.quote(m_pwd)+"@cluster0.z9ajl.mongodb.net/Cluster0?retryWrites=true&w=majority")
 #covid_db = client.COVID_LOCATIONS
@@ -77,10 +77,9 @@ def factor_location_sizes():
             logging_extra = "Individual Country"
             try:
                 country_obj = CountryInfo(country)
-                print(country_obj)
                 distance = convert_to_sq_miles(country_obj.area())# CountryInfo returns area in km
             except:
-                country_obj = country_details_country.country_details(country)
+                country_obj = country_details_country.country_details('India')
                 distance = convert_to_sq_miles(country_obj.area())# CountryInfo returns area in km
         logging.info(combined_key+" | "+logging_extra+" | "+str(distance))
         location_size_column.append(distance)
@@ -95,7 +94,7 @@ def prepare_raw_covid_data(df):
 
 def convert_to_sq_miles(sq_km):
     conv_fac = 0.386102
-    return float(sq_km) * conv_fac 
+    return sq_km * conv_fac 
 
 if __name__ == "__main__":
     #print(searchGoogleForArea("Northern Territory, Australia",True))
