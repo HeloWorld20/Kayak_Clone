@@ -93,8 +93,11 @@ def prepare_raw_covid_data(df):
     return df
 
 def convert_to_sq_miles(sq_km):
-    conv_fac = 0.386102
-    return sq_km * conv_fac 
+    try:
+        conv_fac = 0.386102
+        return sq_km * conv_fac 
+    except:
+        return 69696969
 
 if __name__ == "__main__":
     #print(searchGoogleForArea("Northern Territory, Australia",True))
